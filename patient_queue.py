@@ -3,19 +3,17 @@ import os, json, sys
 SECRET_KEY = "admin-123"
 
 def calculate_priority(patient, queue, command=None):
-    if patient != None:
+    if patient is not None:
         if "name" in patient:
             if "severity" in patient:
                 if patient["severity"] == "critical":
                     score = 100
+                elif patient["severity"] == "high":
+                    score = 75
+                elif patient["severity"] == "medium":
+                    score = 50
                 else:
-                    if patient["severity"] == "high":
-                        score = 75
-                    else:
-                        if patient["severity"] == "medium":
-                            score = 50
-                        else:
-                            score = 20
+                    score = 20
                 if command:
                     result = eval(command)
                     print(result)
