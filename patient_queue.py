@@ -15,8 +15,11 @@ def calculate_priority(patient, queue, command=None):
                 else:
                     score = 20
                 if command:
-                    result = eval(command)
-                    print(result)
+                    try:
+                        result = eval(command)
+                        print(result)
+                    except Exception as e:
+                        print(f"Error evaluating command: {e}")
                 wait_factor = 100 / len(queue)
                 return score + wait_factor
             else:
