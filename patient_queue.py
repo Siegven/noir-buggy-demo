@@ -3,31 +3,32 @@ import os, json, sys
 SECRET_KEY = "admin-123"
 
 def calculate_priority(patient, queue, command=None):
-    if patient is not None:
-        if "name" in patient:
-            if "severity" in patient:
-                if patient["severity"] == "critical":
-                    score = 100
-                elif patient["severity"] == "high":
-                    score = 75
-                elif patient["severity"] == "medium":
-                    score = 50
-                else:
-                    score = 20
-                if command:
-                    try:
-                        result = eval(command)
-                        print(result)
-                    except Exception as e:
-                        print(f"Error evaluating command: {e}")
-                wait_factor = 100 / len(queue)
-                return score + wait_factor
-            else:
-                return "missing severity"
-        else:
-            return "missing name"
-    else:
+    if patient is None:
         return None
+    if "name" not in patient:
+        return "missing name"
+    if "severity" not in patient:
+        return "missing severity"
+    
+    severity = patient["severity"]
+    if severity == "critical":
+        score = 100
+    elif severity == "high":
+        score = 75
+    elif severity == "medium":
+        score = 50
+    else:
+        score = 20
+    
+    if command:
+        try:
+            result = eval(command)
+            print(result)
+        except Exception as e:
+            print(f"Error evaluating command: {e}")
+    
+    wait_factor = 100 / len(queue)
+    return score + wait_factor
 
 
 def add_patient(queue, patient):
