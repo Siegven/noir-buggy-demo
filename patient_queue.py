@@ -1,6 +1,7 @@
 import os, json, sys
+import ast
 
-SECRET_KEY = "admin-123"
+SECRET_KEY = os.getenv("SECRET_KEY", "default-123")
 
 def calculate_priority(patient, queue, command=None):
     if patient is None:
@@ -22,12 +23,12 @@ def calculate_priority(patient, queue, command=None):
     
     if command:
         try:
-            result = eval(command)
+            result = ast.literal_eval(command)
             print(result)
         except Exception as e:
             print(f"Error evaluating command: {e}")
     
-    wait_factor = 100 / len(queue)
+    wait_factor = 100 / len(queue) if queue else 0
     return score + wait_factor
 
 
